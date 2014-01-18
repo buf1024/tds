@@ -1,0 +1,49 @@
+srcs = tds src test
+
+all:
+	for src in $(srcs);\
+	do\
+		cd $$src;\
+		make;\
+	 	if [ $$? -ne 0 ] ; then\
+			exit 1;\
+		fi;\
+		cd ..;\
+	done;\
+
+install:
+	for src in $(srcs);\
+	do\
+		cd $$src;\
+		make install;\
+		if [ $$? -ne 0 ] ; then\
+			exit 1;\
+		fi;\
+		cd ..;\
+  	done;\
+
+
+clean:
+	for src in $(srcs);\
+	do\
+		cd $$src;\
+		make clean;\
+		if [ $$? -ne 0 ] ; then\
+			exit 1;\
+		fi;\
+		cd ..;\
+	done;\
+
+
+dist:
+	cd ..;\
+	find tds -name '*.so'>exclude;\
+	find tds -name '*.o'>>exclude;\
+	find tds -name '*.log'>>exclude;\
+	find tds -name '*.tmp'>>exclude;\
+	find tds -name '*.gz'>>exclude;\
+	tar -cvf tds.tar --exclude-from exclude tds;\
+	gzip tds.tar;\
+	cd -;\
+	mkdir -p dist\
+	mv ../tds.tar.gz dist;\
