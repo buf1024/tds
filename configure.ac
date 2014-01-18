@@ -6,7 +6,7 @@ AC_INIT(tds, 0.01, buf1024@gmail.com)
 
 # Checks for programs.
 AC_PROG_AWK
-AC_PROG_CC
+AC_PROG_CC(cc)
 AC_PROG_MAKE_SET
 
 if test "x$CC" = "xcc" ; then
@@ -21,7 +21,7 @@ if test "x$CC" = "xcc" ; then
     AR_FLAGS="-r -o"
 fi
 
-
+AC_SUBST(CCFLAGS)
 AC_SUBST(LIB_CCFLAGS)
 AC_SUBST(LIB_LDFLAGS)
 AC_SUBST(ARCHIVE)
@@ -56,4 +56,5 @@ AC_TYPE_SIGNAL
 
 AC_OUTPUT([Makefile
 	src/Makefile
+	test/Makefile
 ])

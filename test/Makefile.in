@@ -1,0 +1,31 @@
+CC = @CC@ 
+CCFLAGS = @CCFLAGS@
+LIB_CCFLAGS=@LIB_CCFLAGS@
+LIB_LDFLAGS=@LIB_LDFLAGS@
+
+###################################################################################
+#write your own rules here                                                        #
+###################################################################################
+
+PROG=tds_test
+
+OBJS=main.o
+
+EXT_CCFLAGS=
+EXT_LDFLAGS=
+
+all:$(PROG)
+
+$(PROG): $(OBJS)
+	$(CC) $(CCFLAGS) $(EXT_CCFALGS) $(EXT_LDFALGS) -o $@ $(OBJS)
+
+install:$(PROG)
+	rm -f @prefix@/bin/$(PROG)
+	cp $(PROG) @prefix@/bin/$(PROG)
+
+clean:
+	rm -f *.o
+	rm -f $(PROG)
+
+include @prefix@/rule.mk
+
