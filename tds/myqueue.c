@@ -9,7 +9,7 @@
 #include "myqueue.h"
 
 #define ZERO_MEMORY(item) do { \
-    unsigned i = 0; \
+    size_t i = 0; \
     for(i =0; i<sizeof(*item); i++) { \
         ((char*)(item))[i] = 0; \
     }\

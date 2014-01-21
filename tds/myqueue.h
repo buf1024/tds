@@ -149,7 +149,7 @@ void stailq_node_destroy(stailq_node_t* node);
         stailq_remove_head((head));          \
     }                               \
     else {                              \
-        struct tailq_node_s *curelm = stailq_first((head));     \
+        struct stailq_node_s *curelm = stailq_first((head));     \
         while (stailq_next(curelm) != (elm))     \
             curelm = stailq_next(curelm);        \
         stailq_remove_after(head, curelm);       \
