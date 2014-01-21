@@ -55,6 +55,7 @@ AC_TYPE_SIGNAL
 #AC_CHECK_FUNCS([strlwr])
 
 AC_OUTPUT([Makefile
+	tds/Makefile
 	src/Makefile
 	test/Makefile
 ])

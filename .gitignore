@@ -3,6 +3,9 @@ Makefile
 config.*
 configure
 autom4te.cache
+core.*
+bin/tds_test
+test/tds_test
 # Object files
 *.o
 *.ko

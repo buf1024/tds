@@ -2,30 +2,30 @@ CC = @CC@
 CCFLAGS = @CCFLAGS@
 LIB_CCFLAGS=@LIB_CCFLAGS@
 LIB_LDFLAGS=@LIB_LDFLAGS@
+ARCHIVE = @ARCHIVE@
+AR_FLAGS = @AR_FLAGS@
 
 ###################################################################################
 #write your own rules here                                                        #
 ###################################################################################
+PROG=libtds.a
+OBJS=myqueue.o
 
-PROG=tds_test
+EXT_CCFLAGS =  
+EXT_LDFLAGS = -ldl
 
-OBJS=main.o myqueue_test.o
+all: $(PROG)
 
-EXT_CCFLAGS= -I../tds
-EXT_LDFLAGS= -L../tds -ltds
+$(PROG):$(OBJS)
+	$(ARCHIVE) $(AR_FLAGS) $@ $(OBJS)
+	ranlib $@
 
-all:$(PROG)
-
-$(PROG): $(OBJS)
-	$(CC) $(CCFLAGS) $(EXT_CCFALGS) -o $@ $(OBJS) $(EXT_LDFLAGS)
 
 install:$(PROG)
-	rm -f @prefix@/bin/$(PROG)
-	cp $(PROG) @prefix@/bin/$(PROG)
+	cp $(PROG) @prefix@/lib
 
 clean:
-	rm -f *.o
+	rm -f *.o 
 	rm -f $(PROG)
 
 include @prefix@/rule.mk
-

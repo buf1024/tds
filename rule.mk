@@ -2,4 +2,4 @@
 .SUFFIXES:
 .SUFFIXES:.c .o
 .c.o:
-	$(CC) $(CCFLAGS) -c -o $*.o $<
+	$(CC) $(CCFLAGS) $(EXT_CCFLAGS) -c -o $*.o $<
