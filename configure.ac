@@ -12,9 +12,9 @@ AC_PROG_MAKE_SET
 if test "x$CC" = "xcc" ; then
     LDFLAGS="$LDFLAGS"
     #DEBUG
-    CCFLAGS="-ggdb -Wall -fPIC -fpic"
+    CCFLAGS="-std=c99 -ggdb -Wall -fPIC -fpic"
     #RELEASE
-    #CCFLAGS="-ggdb -Wall -fPIC -fpic -O2 -DNDEBUG"
+    #CCFLAGS="-std=c99 -ggdb -Wall -fPIC -fpic -O2 -DNDEBUG"
     LIB_CCFLAGS="-shared -fPIC -fpic"
     LIB_LDFLAGS="-shared -fPIC -fpic"
     ARCHIVE="ar"

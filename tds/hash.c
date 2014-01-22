@@ -55,7 +55,7 @@ unsigned int murmur(unsigned char *data, size_t len)
     return h;
 }
 
-unsigned int djb(unsigned char* data, int len)
+unsigned int djb(unsigned char* data, size_t len)
 {
     unsigned int hash = 5381;
 

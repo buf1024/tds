@@ -11,6 +11,6 @@
 #include <stddef.h>
 
 unsigned int murmur(unsigned char *data, size_t len);
-unsigned int djb(unsigned char* data, int len);
+unsigned int djb(unsigned char* data, size_t len);
 
 #endif /* __HASH_H__ */

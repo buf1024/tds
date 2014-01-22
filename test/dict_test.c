@@ -18,28 +18,28 @@ TEST(mydict, dict)
     int i = 0;
 
     int sum = 0;
-    for (int i = 0; i < 10000; i++) {
+    for (i = 0; i < 10000; i++) {
         k = i, v = i;
         node = dict_add(d, &k, sizeof(k), &v, sizeof(v));
         ASSERT_TRUE(node != NULL);
 
         sum += i;
     }
-    for (int i = 0; i < 10000; i++) {
-        node = dict_find(d, &k, sizeof(k), &v, sizeof(v));
-        ASSERT_EQ(dict_get_val(node), i);
+    for (i = 0; i < 10000; i++) {
+        node = dict_find(d, &k, sizeof(k));
+        ASSERT_EQ((long)dict_get_val(node), i);
     }
 
     i = 0;
-    for(node = dict_first(d); node; node = dict_next(node)) {
-        i += (int)dict_get_val(node);
+    for(node = dict_first(d); node; node = dict_next(d, node)) {
+        i += (long)dict_get_val(node);
     }
     ASSERT_EQ(i, sum);
 
-    for (int i = 0; i < 10000; i++) {
+    for (i = 0; i < 10000; i++) {
         k = i;
         node = dict_delete(d, &k, sizeof(k));
-        ASSERT_EQ(dict_get_val(node), i);
+        ASSERT_EQ((long)dict_get_val(node), i);
     }
     ASSERT_TRUE(dict_empty(d));
 
