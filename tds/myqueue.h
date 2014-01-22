@@ -43,6 +43,9 @@ void slist_destroy(slist_t* list);
 slist_node_t* slist_node_create(void* data, fn_free_t fn_free);
 void slist_node_destroy(slist_node_t* node);
 
+#define slist_node_data(node) ((node)->data)
+#define slist_set_node_data(node, d) ((node)->data = (d))
+
 #define slist_init(head) do{slist_first(head) = NULL;}while(0)
 #define slist_empty(head)   ((head)->slh_first == NULL)
 #define slist_first(head)   ((head)->slh_first)
@@ -114,6 +117,9 @@ void stailq_destroy(stailq_t* stailq);
 
 stailq_node_t* stailq_node_create(void* data, fn_free_t fn_free);
 void stailq_node_destroy(stailq_node_t* node);
+
+#define stailq_node_data(node) ((node)->data)
+#define stailq_set_node_data(node, d) ((node)->data = (d))
 
 #define stailq_init(head) do {                      \
         stailq_first((head)) = NULL;                    \
@@ -211,6 +217,8 @@ void list_destroy(list_t* list);
 list_node_t* list_node_create(void* data, fn_free_t fn_free);
 void list_node_destroy(list_node_t* node);
 
+#define list_node_data(node) ((node)->data)
+#define list_set_node_data(node, d) ((node)->data = (d))
 
 #define list_init(head) do { list_first((head)) = NULL; } while (0)
 #define list_empty(head)    ((head)->lh_first == NULL)
@@ -287,6 +295,9 @@ void tailq_destroy(tailq_t* tailq);
 
 tailq_node_t* tailq_node_create(void* data, fn_free_t fn_free);
 void tailq_node_destroy(tailq_node_t* node);
+
+#define tailq_node_data(node) ((node)->data)
+#define tailq_set_node_data(node, d) ((node)->data = (d))
 
 #define tailq_init(head) do {                  \
     (head)->tqh_last = &tailq_first((head));            \
