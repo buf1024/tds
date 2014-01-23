@@ -9,7 +9,7 @@ LIB_LDFLAGS=@LIB_LDFLAGS@
 
 PROG=tds_test
 
-OBJS=main.o myqueue_test.o dict_test.o
+OBJS=main.o myqueue_test.o dict_test.o iniconf_test.o log_test.o util_test.o
 
 EXT_CCFLAGS= -I../tds
 EXT_LDFLAGS= -L../tds -ltds

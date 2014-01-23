@@ -7,9 +7,11 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <unistd.h>
 #include "iniconf.h"
 
 #define INI_MAX_KEY_LEN  256
@@ -67,9 +69,67 @@ static int read_line(int fd, char* buf, int size)
 
     return index;
 }
+static int ini_save_sec(ini_sec_t* sec, int fd)
+{
+    if (!sec || fd < 0)
+        return -1;
 
+    if (sec->key[0] != '\0') {
+        write(fd, "[", 1);
+        write(fd, sec->key, strlen(sec->key));
+        write(fd, "]\n", 2);
+
+        slist_node_t* node = NULL;
+        for (node = slist_first(sec->kv); node; node = slist_next(node)) {
+
+            ini_kv_t* kv = (ini_kv_t*) slist_node_data(node);
+            if (kv->k[0] != '\0' && kv->v[0] != '\0') {
+                write(fd, kv->k, strlen(kv->k));
+                write(fd, "=", 1);
+                write(fd, kv->v, strlen(kv->v));
+                write(fd, "\n", 1);
+            }
+        }
+    }
+    return 0;
+}
+static int ini_save_sec_buf(ini_sec_t* sec, char* buf, size_t len)
+{
+    if (!sec || !buf || len <= 0)
+        return -1;
+
+    size_t wlen = 0;
+    if (sec->key[0] != '\0') {
+        wlen += snprintf(buf, len - wlen, "[");
+        if(wlen >= len) return -1;
+        wlen += snprintf(buf, len - wlen, "%s", sec->key);
+        if(wlen >= len) return -1;
+
+        slist_node_t* node = NULL;
+        for (node = slist_first(sec->kv); node; node = slist_next(node)) {
+
+            ini_kv_t* kv = (ini_kv_t*) slist_node_data(node);
+            if (kv->k[0] != '\0' && kv->v[0] != '\0') {
+                wlen += snprintf(buf, len - wlen, "%s", kv->k);
+                if(wlen >= len) return -1;
+                wlen += snprintf(buf, len - wlen, "=");
+                if(wlen >= len) return -1;
+                wlen += snprintf(buf, len - wlen, "%s", kv->v);
+                if(wlen >= len) return -1;
+                wlen += snprintf(buf, len - wlen, "\n");
+                if(wlen >= len) return -1;
+            }
+        }
+    }
+    return wlen;
+}
 int ini_destroy(ini_conf_t* ini)
 {
+    slist_node_t* node_sec = NULL;
+    for (node_sec = slist_first(ini->sec); node_sec; node_sec = slist_next(node_sec)) {
+        ini_sec_t* cur_sec = (ini_sec_t*) slist_node_data(node_sec);
+        slist_destroy(cur_sec->kv);
+    }
     return 0;
 }
 ini_conf_t* ini_create()
@@ -144,11 +204,40 @@ int ini_load(ini_conf_t* ini, const char* file)
 }
 int ini_save(ini_conf_t* ini, const char* file)
 {
+    if (!ini || !file || !ini->sec)
+        return -1;
+
+    int fd = open(file, O_RDWR | O_CREAT,
+            S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
+    if (fd == -1)
+        return -1;
+
+    slist_node_t* node = NULL;
+    for (node = slist_first(ini->sec); node; node = slist_next(node)) {
+        ini_sec_t* sec = (ini_sec_t*) slist_node_data(node);
+        if (ini_save_sec(sec, fd) != 0) {
+
+            close(fd);
+            return -1;
+        }
+    }
+    close(fd);
     return 0;
 }
 
 int ini_dump(ini_conf_t* ini, char* buf, size_t len)
 {
+    if (!ini || !buf || !ini->sec)
+        return -1;
+    slist_node_t* node = NULL;
+    size_t wlen = 0;
+    for (node = slist_first(ini->sec); node; node = slist_next(node)) {
+        if(wlen >= len) return -1;
+        ini_sec_t* sec = (ini_sec_t*) slist_node_data(node);
+        int ret = ini_save_sec_buf(sec, buf + wlen, len - wlen);
+        if(ret <= 0) return -1;
+        wlen += ret;
+    }
     return 0;
 }
 
@@ -206,10 +295,10 @@ ini_sec_t* ini_insert_sec(ini_conf_t* ini, const char* key)
     }
     return sec;
 }
-int ini_delete_sec(ini_config_t* ini, const char* key)
+int ini_delete_sec(ini_conf_t* ini, const char* key)
 {
     if (!ini || !key)
-        return NULL ;
+        return -1 ;
 
     if (ini->sec == NULL || slist_empty(ini->sec)) {
             return 0 ;
@@ -237,7 +326,7 @@ int ini_delete_sec(ini_config_t* ini, const char* key)
             break;
         }
 
-        node_pre = cur_sec;
+        node_pre = node_cur;
     }
     return 0;
 }
@@ -294,12 +383,12 @@ int ini_insert_val(ini_sec_t* sec, const char* key, const char* val)
     if(node_cur == NULL && node_pre != NULL) {
         slist_insert_after(node_pre, node_new);
     }
-    return sec;
+    return 0;
 }
 int ini_delete_val(ini_sec_t* sec, const char* key)
 {
     if (!sec || !key)
-        return NULL ;
+        return -1 ;
 
     if (sec->kv == NULL || slist_empty(sec->kv)) {
             return 0 ;
@@ -327,7 +416,7 @@ int ini_delete_val(ini_sec_t* sec, const char* key)
             break;
         }
 
-        node_pre = cur_sec;
+        node_pre = node_cur;
     }
     return 0;
 }

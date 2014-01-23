@@ -12,5 +12,8 @@
 #include "myqueue.h"
 #include "tree.h"
 #include "dict.h"
+#include "iniconf.h"
+#include "log.h"
+#include "tds.h"
 
 #endif /* __TDS_H__ */
