@@ -9,7 +9,9 @@ AR_FLAGS = @AR_FLAGS@
 #write your own rules here                                                        #
 ###################################################################################
 PROG=libtds.a
-OBJS=myqueue.o hash.o dict.o iniconf.o log.o util.o
+OBJS=myqueue.o hash.o dict.o iniconf.o log.o util.o base64.o \
+	 md4.o md5.o sha1.o sha2.o crc.o \
+	 buffer.o
 
 EXT_CCFLAGS =  
 EXT_LDFLAGS = -ldl
