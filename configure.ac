@@ -12,18 +12,16 @@ AC_PROG_MAKE_SET
 if test "x$CC" = "xcc" ; then
     LDFLAGS="$LDFLAGS"
     #DEBUG
-    CCFLAGS="-std=c99 -ggdb -Wall -fPIC -fpic"
+    CCFLAGS="-ggdb -Wall -fPIC -fpic"
     #RELEASE
-    #CCFLAGS="-std=c99 -ggdb -Wall -fPIC -fpic -O2 -DNDEBUG"
-    LIB_CCFLAGS="-shared -fPIC -fpic"
-    LIB_LDFLAGS="-shared -fPIC -fpic"
+    #CCFLAGS="-ggdb -Wall -fPIC -fpic -O2 -DNDEBUG"
+    LDFLAGS="-shared -fPIC -fpic"
     ARCHIVE="ar"
     AR_FLAGS="-r -o"
 fi
 
 AC_SUBST(CCFLAGS)
-AC_SUBST(LIB_CCFLAGS)
-AC_SUBST(LIB_LDFLAGS)
+AC_SUBST(LDFLAGS)
 AC_SUBST(ARCHIVE)
 AC_SUBST(AR_FLAGS)
 
@@ -57,5 +55,6 @@ AC_TYPE_SIGNAL
 AC_OUTPUT([Makefile
 	tds/Makefile
 	src/Makefile
+	src/loadbalance/Makefile
 	test/Makefile
 ])

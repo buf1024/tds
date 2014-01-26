@@ -350,6 +350,11 @@ ini_sec_t* ini_get_sec(ini_conf_t* ini, const char* key)
     return NULL;
 }
 
+const char* ini_sec_name(ini_sec_t* sec)
+{
+    return sec->key;
+}
+
 int ini_insert_val(ini_sec_t* sec, const char* key, const char* val)
 {
     if (!sec || !key || !val)

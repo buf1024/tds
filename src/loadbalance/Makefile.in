@@ -1,0 +1,36 @@
+CC = @CC@ 
+CCFLAGS = @CCFLAGS@
+LIB_CCFLAGS=@LIB_CCFLAGS@
+LIB_LDFLAGS=@LIB_LDFLAGS@
+ARCHIVE = @ARCHIVE@
+AR_FLAGS = @AR_FLAGS@
+
+###################################################################################
+#write your own rules here                                                        #
+###################################################################################
+PROG_LOB=lob
+PROG_LOBMNG=lobmng
+OBJS_LOB=lob.o task.o
+OBJS_LOBMNG=lobmng.o
+
+EXT_CCFLAGS =  -I@prefix@/tds
+EXT_LDFLAGS = -ldl -L@prefix@/tds -ltds
+
+all: $(PROG_LOB) $(PROG_LOBMNG)
+
+$(PROG_LOB):$(OBJS_LOB)
+	$(CC) -o $@ $(OBJS_LOB) $(LDFLAGS) $(EXT_LDFLAGS)
+
+$(PROG_LOBMNG):$(OBJS_LOBMNG)
+	$(CC) -o $@ $(OBJS_LOBMNG) $(LDFLAGS) $(EXT_LDFLAGS)
+
+install:$(PROG_LOB) $(PROG_LOBMNG)
+	cp $(PROG_LOB) @prefix@/lib
+	cp $(PROG_LOBMNG) @prefix@/lib
+
+clean:
+	rm -f *.o 
+	rm -f $(PROG_LOB)
+	rm -f $(PROG_LOBMNG)
+
+include @prefix@/rule.mk

@@ -4,8 +4,10 @@ config.*
 configure
 autom4te.cache
 core.*
-bin/tds_test
-test/tds_test
+tds_test
+lob
+lobmng
+
 # Object files
 *.o
 *.ko
